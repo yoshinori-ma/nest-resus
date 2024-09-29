@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { EstateTransitionModule } from 'src/modules/estate-transition.module';
+import { EstateTransactionModule } from 'src/modules/estate-transaction.module';
 import { RouterModule } from '@nestjs/core';
 
 @Module({
@@ -8,10 +8,10 @@ import { RouterModule } from '@nestjs/core';
       // townPlanningModule掘ってもいいかも
       {
         path: 'townPlanning/estateTransaction',
-        module: EstateTransitionModule,
+        module: EstateTransactionModule,
       },
     ]),
-    EstateTransitionModule,
+    EstateTransactionModule,
   ],
   controllers: [],
   providers: [],

@@ -1,14 +1,16 @@
-import { IsInt, IsString, IsIn, IsNotEmpty } from 'class-validator';
+import { IsInt, IsString, IsNotEmpty, Min, Max } from 'class-validator';
 import { Transform } from 'class-transformer';
 
 export class GetEstateTransactionDto {
   @IsInt()
-  @IsIn([...Array(13).keys()].map((i) => i + 2009))
+  @Min(2009)
+  @Max(2021)
   @Transform(({ value }) => parseInt(value, 10))
   year: number;
 
   @IsInt()
-  @IsIn([...Array(47).keys()].map((i) => i + 1))
+  @Min(1)
+  @Max(47)
   @Transform(({ value }) => parseInt(value, 10))
   prefCode: number;
 
@@ -17,7 +19,8 @@ export class GetEstateTransactionDto {
   cityCode: string;
 
   @IsInt()
-  @IsIn([1, 2, 3, 4, 5])
+  @Min(1)
+  @Max(5)
   @Transform(({ value }) => parseInt(value, 10))
   displayType: number;
 }
