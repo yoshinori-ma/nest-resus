@@ -5,6 +5,7 @@ import { IEstateTransactionRepositoryToken } from 'src/repositories/estate-trans
 import { EstateTransactionRepositoryImpl } from 'src/infrastructure/estate-transaction-repository-impl';
 import { HttpModule } from '@nestjs/axios';
 import { ResasApiService } from 'src/services/resas-api.service';
+import { IsCityCodeValidConstraint } from 'src/validators/city-code.validator';
 
 @Module({
   imports: [HttpModule],
@@ -16,6 +17,7 @@ import { ResasApiService } from 'src/services/resas-api.service';
       useClass: EstateTransactionRepositoryImpl,
     },
     ResasApiService,
+    IsCityCodeValidConstraint,
   ],
 })
 export class EstateTransactionModule {}

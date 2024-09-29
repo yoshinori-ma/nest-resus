@@ -5,6 +5,7 @@ import {
 } from 'class-validator';
 import { Injectable } from '@nestjs/common';
 import { ResasApiService } from 'src/services/resas-api.service';
+import { GetEstateTransactionDto } from 'src/dto/estate-transaction/get-estate-transaction.dto';
 
 @ValidatorConstraint({ name: 'IsCityCodeValid', async: true })
 @Injectable()
@@ -15,30 +16,34 @@ export class IsCityCodeValidConstraint implements ValidatorConstraintInterface {
     cityCode: string,
     args: ValidationArguments,
   ): Promise<boolean> {
-    const object = args.object as any;
-    const prefCode = object.prefCode;
+    const object = args.object;
 
-    if (!prefCode) {
-      // prefCode が未定義の場合、バリデーションをスキップ
+    // prefCode が未定義の場合、バリデーション失敗
+    if (!isGetEstateTransactionDto(object)) {
       return false;
     }
+    const prefCode = object.prefCode;
 
     try {
-      // RESAS API を使用して、市区町村コードの一覧を取得
       const cities = await this.resasApiService.getCitiesByPrefCode(prefCode);
       const cityCodes = cities.map((city) => city.cityCode);
 
-      // cityCode が取得した一覧に含まれているか確認
       return cityCodes.includes(cityCode);
-    } catch (error) {
-      console.log(error);
-      // エラーが発生した場合はバリデーションを失敗させる
+    } catch (_error) {
       return false;
     }
   }
 
-  defaultMessage(args: ValidationArguments): string {
-    console.log(args);
+  defaultMessage(_args: ValidationArguments): string {
     return `cityCode must be a valid code for the specified prefCode`;
   }
+}
+function isGetEstateTransactionDto(
+  object: any,
+): object is GetEstateTransactionDto {
+  return (
+    typeof object === 'object' &&
+    'prefCode' in object &&
+    typeof object.prefCode === 'number'
+  );
 }

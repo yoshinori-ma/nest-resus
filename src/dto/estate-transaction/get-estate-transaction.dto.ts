@@ -1,4 +1,5 @@
 import { IsInt, IsString, IsNotEmpty, Min, Max } from 'class-validator';
+import { IsCityCodeValid } from 'src/validators/city-code.decorator';
 import { Transform } from 'class-transformer';
 
 export class GetEstateTransactionDto {
@@ -16,6 +17,7 @@ export class GetEstateTransactionDto {
 
   @IsString()
   @IsNotEmpty()
+  @IsCityCodeValid()
   cityCode: string;
 
   @IsInt()
